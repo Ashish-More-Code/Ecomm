@@ -1,9 +1,9 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from estoreapp.models import products,Cart
+from estoreapp.models import products,Cart,Order
 from django.db.models import Q
-
+import random
 # Create your views here.
 def index(request):
     context={}
@@ -149,3 +149,26 @@ def uregistartion(request):
            
     else:
         return render(request,'register.html')
+    
+def placeorder(request):
+    userid=request.user.id
+    c=Cart.objects.filter(uid=userid)
+    print(c)
+    oid=random.randrange(1000,9999)
+    print(oid)
+    for x in c:
+        print(x.pid.name)
+        o=Order.objects.create(order_id=oid,pid=x.pid,uid=x.uid,qty=x.qty)
+        o.save()
+        x.delete()
+    orders=Order.objects.filter(uid=userid)
+    context={}
+    context['data']=orders
+    s=0
+    for x in orders:
+        s=s+x.pid.price*x.qty
+    np=len(orders)
+    context['total']=s
+    context['items']=np
+    return render(request,'placeorder.html',context)
+

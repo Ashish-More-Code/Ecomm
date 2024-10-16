@@ -4,7 +4,7 @@ from estore import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('',views.index),
+    path('',views.index,name='home'),
     path('productdetails/<pid>',views.productsdetails),
     path('viewcart',views.cart),
     path('login',views.ulogin),
@@ -16,6 +16,8 @@ urlpatterns = [
     path('addtocart/<pid>',views.addtocart),
     path('remove/<cid>',views.remove),
     path('updateqty/<qv>/<cid>',views.updateqty),
+    path('placeorder',views.placeorder),
+  
 
 
 
